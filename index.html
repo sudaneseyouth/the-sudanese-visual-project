@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Sudan Visuals Project | Sudanese Youth</title>
+    <title>The Visual Project | Sudanese Youth</title>
     <style>
         /* COLOR PALETTE & STYLING */
         :root {
@@ -61,12 +61,8 @@
         .logo-text {
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--header-text);
+            color: var(--accent-gold); /* Yellow gold header title */
             letter-spacing: 0.3px;
-        }
-
-        .logo-text span {
-            color: #8b0000; /* Subtle Sudanese flag accent tone */
         }
 
         .upload-btn {
@@ -290,7 +286,7 @@
         <div class="brand-container">
             <!-- Replace 'sudanese-youth-logo.png' with your logo image path -->
             <img src="sudanese-youth-logo.png" alt="Sudanese Youth Logo" class="brand-logo" onerror="this.style.display='none'">
-            <div class="logo-text">Sudanese Youth <span>| Visuals Project</span></div>
+            <div class="logo-text">The Visual Project</div>
         </div>
         <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="upload-btn">+ Submit Media</a>
     </header>
@@ -299,8 +295,8 @@
     <section class="hero">
         <div class="hero-tag">Black Pillar • Identity & Heritage</div>
         <h1>Preserving Sudanese Culture & Memory</h1>
-        <p>A community-driven digital archive documenting the landscape, people, daily life, and visual history of Sudan. Open access under Creative Commons (CC BY 4.0).</p>
-        <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="hero-cta">📝 Open Submission Form</a>
+        <p>A community-driven digital archive documenting the landscape, people, daily life, and visual history of Sudan.</p>
+        <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="hero-cta">Add Sudan visuals from your lens</a>
     </section>
 
     <!-- SEARCH & CATEGORY FILTERS -->
@@ -311,7 +307,11 @@
             <button class="filter-chip" onclick="filterCategory('landscapes')">Landscapes</button>
             <button class="filter-chip" onclick="filterCategory('culture')">Culture & Traditions</button>
             <button class="filter-chip" onclick="filterCategory('fashion')">Fashion & Attire</button>
-            <button class="filter-chip" onclick="filterCategory('architecture')">Architecture</button>
+            <button class="filter-chip" onclick="filterCategory('architecture')">Architecture & Landmarks</button>
+            <button class="filter-chip" onclick="filterCategory('dailylife')">Daily Life & Street</button>
+            <button class="filter-chip" onclick="filterCategory('art')">Art & Craft</button>
+            <button class="filter-chip" onclick="filterCategory('culinary')">Food & Culinary</button>
+            <button class="filter-chip" onclick="filterCategory('archives')">Historical Archives</button>
         </div>
     </div>
 
