@@ -65,7 +65,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* EDITED: Changed header span color to match accent gold */
         .logo-text span {
             color: var(--accent-gold); 
         }
@@ -95,7 +94,7 @@
             border-color: var(--accent-gold);
         }
 
-        /* Small side button for the Developer Spec / Admin Feature */
+        /* Small side button for Admin Feature */
         .admin-btn {
             background-color: transparent;
             color: var(--header-text);
@@ -163,7 +162,7 @@
             transform: translateY(-1px);
         }
 
-        /* <!-- EDITED: Added Admin Panel and Modal Styles --> */
+        /* Admin Panel and Modal Styles */
         .admin-dashboard {
             display: none; /* Revealed upon authentication */
             max-width: 700px;
@@ -448,12 +447,9 @@
     <!-- LIGHT HEADER WITH BLACK LOGO PLACEHOLDER -->
     <header>
         <div class="brand-container">
-            <!-- Replace 'sudanese-youth-logo.png' with your logo image path -->
             <img src="sudanese-youth-logo.png" alt="Sudanese Youth Logo" class="brand-logo" onerror="this.style.display='none'">
-            <!-- EDITED: Changed title from 'Sudanese Youth | Visuals Project' to 'Sudanese Youth | Visual Project' -->
             <div class="logo-text">Sudanese Youth <span>| Visual Project</span></div>
         </div>
-        <!-- EDITED: Updated Admin button to trigger in-page modal via JS -->
         <div class="header-actions">
             <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="upload-btn">+ Submit Media</a>
             <button class="admin-btn" onclick="openAdminModal()">Admin</button>
@@ -464,13 +460,11 @@
     <section class="hero">
         <div class="hero-tag">Black Pillar • Identity & Heritage</div>
         <h1>Preserving Sudanese Culture & Memory</h1>
-        <!-- EDITED: Removed 'Open access under Creative Commons (CC BY 4.0).' text -->
         <p>A community-driven digital archive documenting the landscape, people, daily life, and visual history of Sudan.</p>
-        <!-- EDITED: Removed emoji and updated call-to-action button text -->
         <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="hero-cta">Add Sudan visuals from your lens</a>
     </section>
 
-    <!-- <!-- EDITED: Integrated Hidden Admin Upload Form Dashboard Section --> -->
+    <!-- Hidden Admin Upload Form Dashboard Section -->
     <div class="admin-dashboard" id="adminDashboard">
         <h2>Admin Upload Dashboard</h2>
         <form class="admin-form" id="adminUploadForm" onsubmit="handleImageUpload(event)">
@@ -491,7 +485,7 @@
         </form>
     </div>
 
-    <!-- <!-- EDITED: Admin Access Passcode Modal --> -->
+    <!-- Admin Access Passcode Modal -->
     <div class="admin-modal-overlay" id="adminModalOverlay">
         <div class="admin-modal">
             <h3>Admin Access</h3>
@@ -507,7 +501,6 @@
     <!-- SEARCH & CATEGORY FILTERS -->
     <div class="controls">
         <input type="text" id="searchInput" class="search-box" placeholder="Search visuals (e.g., Jirtig, Khartoum, Nile, Toub)...">
-        <!-- EDITED: Updated category filter values and display names to align with Developer Spec -->
         <div class="filters">
             <button class="filter-chip active" onclick="filterCategory('all')">All</button>
             <button class="filter-chip" onclick="filterCategory('landscapes')">Landscapes</button>
@@ -523,7 +516,6 @@
 
     <!-- MASONRY GALLERY GRID -->
     <div class="gallery-container" id="gallery">
-        <!-- EDITED: Updated data-category attributes to match spec values (e.g., 'dailylife', 'archives') -->
         <div class="gallery-item" data-category="landscapes" data-title="Nile Sunset Khartoum">
             <img src="https://picsum.photos/600/800?random=1" alt="Landscapes">
             <div class="item-info">
@@ -565,7 +557,7 @@
 
     <!-- JAVASCRIPT -->
     <script>
-        // <!-- EDITED: Admin Passcode & Modal Handlers -->
+        // Admin Passcode & Modal Handlers
         const ADMIN_PASS = "Sudan2026!";
 
         function openAdminModal() {
@@ -593,7 +585,7 @@
             }
         }
 
-        // <!-- EDITED: Dynamic Media Upload & Gallery Injection Handler -->
+        // Dynamic Media Upload & Gallery Injection Handler
         function handleImageUpload(e) {
             e.preventDefault();
 
