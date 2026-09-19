@@ -682,8 +682,155 @@
                 }
             });
         });
+// REPOSITORY DETAILS & PASSCODE
+        const GITHUB_USERNAME = "sudaneseyouth"; 
+        const GITHUB_REPO = "the-sudanese-visual-project"; 
+        const ADMIN_PASS = "Sudan2026!"; 
 
-        // Lightbox Logic
+        function openAdminModal() {
+            document.getElementById('adminModalOverlay').style.display = 'flex';
+            document.getElementById('adminPassInput').value = '';
+            document.getElementById('githubTokenInput').value = '';
+            document.getElementById('adminModalError').style.display = 'none';
+            document.getElementById('adminPassInput').focus();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModalOverlay').style.display = 'none';
+        }
+
+        function unlockAdmin() {
+            const enteredPass = document.getElementById('adminPassInput').value;
+            const token = document.getElementById('githubTokenInput').value.trim();
+
+            if (enteredPass === ADMIN_PASS && token.startsWith("ghp_")) {
+                window.userGithubToken = token;
+                closeAdminModal();
+                const dash = document.getElementById('adminDashboard');
+                dash.style.display = 'block';
+                dash.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                const err = document.getElementById('adminModalError');
+                err.innerText = "Invalid passcode or token format (must start with ghp_)";
+                err.style.display = 'block';
+            }
+        }
+
+        async function handleImageUpload(e) {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.innerText = "Publishing to GitHub...";
+            submitBtn.disabled = true;
+
+            const fileInput = document.getElementById('photoFileInput').files[0];
+            const titleInput = document.getElementById('photoTitleInput').value.trim();
+            const categorySelect = document.getElementById('photoCategorySelect');
+            const categoryVal = categorySelect.value;
+            const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
+
+            try {
+                const base64Data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = error => reject(error);
+                    reader.readAsDataURL(fileInput);
+                });
+
+                const fileName = `uploads/${Date.now()}_${fileInput.name.replace(/\s+/g, '_')}`;
+
+                const uploadRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${fileName}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${window.userGithubToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Admin upload image: ${titleInput}`,
+                        content: base64Data
+                    })
+                });
+
+                if (!uploadRes.ok) throw new Error("Image upload failed. Check your token scopes.");
+
+                const htmlRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
+                    headers: { 'Authorization': `Bearer ${window.userGithubToken}` }
+                });
+                const htmlData = await htmlRes.json();
+                const currentHtml = decodeURIComponent(escape(atob(htmlData.content)));
+
+                const newPhotoCard = `
+        <div class="gallery-item" data-category="${categoryVal}" data-title="${titleInput}">
+            <img src="${fileName}" alt="${titleInput}">
+            <div class="item-info">
+                <span>${titleInput}</span>
+                <span class="item-tag">${categoryText}</span>
+            </div>
+        </div>`;
+
+                const updatedHtml = currentHtml.replace(
+                    '<div class="gallery-container" id="gallery">',
+                    '<div class="gallery-container" id="gallery">' + newPhotoCard
+                );
+
+                const updateRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${window.userGithubToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Publish photo card to gallery: ${titleInput}`,
+                        content: btoa(unescape(encodeURIComponent(updatedHtml))),
+                        sha: htmlData.sha
+                    })
+                });
+
+                if (!updateRes.ok) throw new Error("Failed to update index.html on GitHub.");
+
+                alert("Success! Photo published. GitHub Pages will build in 1–2 minutes.");
+                location.reload();
+
+            } catch (err) {
+                alert("Upload Error: " + err.message);
+                console.error(err);
+            } finally {
+                submitBtn.innerText = "Publish Photo to Gallery";
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Category Filter
+        function filterCategory(category) {
+            const chips = document.querySelectorAll('.filter-chip');
+            chips.forEach(chip => chip.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Live Search
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.gallery-item');
+
+            items.forEach(item => {
+                const title = item.getAttribute('data-title').toLowerCase();
+                if (title.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Lightbox
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
 
@@ -699,5 +846,6 @@
             lightbox.style.display = 'none';
         }
     </script>
+       
 </body>
 </html>
