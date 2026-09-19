@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Visual Project | Sudanese Youth</title>
+    <title>The Sudan Visuals Project | Sudanese Youth</title>
     <style>
         /* COLOR PALETTE & STYLING */
         :root {
@@ -61,8 +61,13 @@
         .logo-text {
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--accent-gold); /* Yellow gold header title */
+            color: var(--header-text);
             letter-spacing: 0.3px;
+        }
+
+        /* EDITED: Changed header span color to match accent gold */
+        .logo-text span {
+            color: var(--accent-gold); 
         }
 
         .upload-btn {
@@ -286,7 +291,8 @@
         <div class="brand-container">
             <!-- Replace 'sudanese-youth-logo.png' with your logo image path -->
             <img src="sudanese-youth-logo.png" alt="Sudanese Youth Logo" class="brand-logo" onerror="this.style.display='none'">
-            <div class="logo-text">The Visual Project</div>
+            <!-- EDITED: Changed title from 'Sudanese Youth | Visuals Project' to 'Sudanese Youth | Visual Project' -->
+            <div class="logo-text">Sudanese Youth <span>| Visual Project</span></div>
         </div>
         <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="upload-btn">+ Submit Media</a>
     </header>
@@ -295,23 +301,26 @@
     <section class="hero">
         <div class="hero-tag">Black Pillar • Identity & Heritage</div>
         <h1>Preserving Sudanese Culture & Memory</h1>
+        <!-- EDITED: Removed 'Open access under Creative Commons (CC BY 4.0).' text -->
         <p>A community-driven digital archive documenting the landscape, people, daily life, and visual history of Sudan.</p>
+        <!-- EDITED: Removed emoji and updated call-to-action button text -->
         <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="hero-cta">Add Sudan visuals from your lens</a>
     </section>
 
     <!-- SEARCH & CATEGORY FILTERS -->
     <div class="controls">
         <input type="text" id="searchInput" class="search-box" placeholder="Search visuals (e.g., Jirtig, Khartoum, Nile, Toub)...">
+        <!-- EDITED: Added related category filter chips (Daily Life, Music & Performing Arts, Food & Culinary, History & Archaeology) -->
         <div class="filters">
             <button class="filter-chip active" onclick="filterCategory('all')">All</button>
             <button class="filter-chip" onclick="filterCategory('landscapes')">Landscapes</button>
             <button class="filter-chip" onclick="filterCategory('culture')">Culture & Traditions</button>
             <button class="filter-chip" onclick="filterCategory('fashion')">Fashion & Attire</button>
-            <button class="filter-chip" onclick="filterCategory('architecture')">Architecture & Landmarks</button>
-            <button class="filter-chip" onclick="filterCategory('dailylife')">Daily Life & Street</button>
-            <button class="filter-chip" onclick="filterCategory('art')">Art & Craft</button>
+            <button class="filter-chip" onclick="filterCategory('architecture')">Architecture</button>
+            <button class="filter-chip" onclick="filterCategory('daily-life')">Daily Life</button>
+            <button class="filter-chip" onclick="filterCategory('music')">Music & Arts</button>
             <button class="filter-chip" onclick="filterCategory('culinary')">Food & Culinary</button>
-            <button class="filter-chip" onclick="filterCategory('archives')">Historical Archives</button>
+            <button class="filter-chip" onclick="filterCategory('history')">History & Archaeology</button>
         </div>
     </div>
 
