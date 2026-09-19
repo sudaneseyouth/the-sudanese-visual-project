@@ -70,6 +70,13 @@
             color: var(--accent-gold); 
         }
 
+        /* EDITED: Header buttons container */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .upload-btn {
             background-color: var(--bg-dark);
             color: var(--text-light);
@@ -86,6 +93,26 @@
             background-color: var(--accent-gold);
             color: #0d0e11;
             border-color: var(--accent-gold);
+        }
+
+        /* EDITED: Small side button for the Developer Spec / Admin Feature */
+        .admin-btn {
+            background-color: transparent;
+            color: var(--header-text);
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.75rem;
+            border: 1px solid var(--border-dark);
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+
+        .admin-btn:hover {
+            opacity: 1;
+            background-color: var(--card-bg);
+            color: var(--text-light);
         }
 
         /* HERO SECTION (BLACK PILLAR THEME) */
@@ -294,7 +321,11 @@
             <!-- EDITED: Changed title from 'Sudanese Youth | Visuals Project' to 'Sudanese Youth | Visual Project' -->
             <div class="logo-text">Sudanese Youth <span>| Visual Project</span></div>
         </div>
-        <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="upload-btn">+ Submit Media</a>
+        <!-- EDITED: Wrapped action buttons and added small side admin button -->
+        <div class="header-actions">
+            <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="upload-btn">+ Submit Media</a>
+            <a href="/admin" class="admin-btn">Admin</a>
+        </div>
     </header>
 
     <!-- HERO SECTION -->
@@ -310,22 +341,23 @@
     <!-- SEARCH & CATEGORY FILTERS -->
     <div class="controls">
         <input type="text" id="searchInput" class="search-box" placeholder="Search visuals (e.g., Jirtig, Khartoum, Nile, Toub)...">
-        <!-- EDITED: Added related category filter chips (Daily Life, Music & Performing Arts, Food & Culinary, History & Archaeology) -->
+        <!-- EDITED: Updated category filter values and display names to align with Developer Spec -->
         <div class="filters">
             <button class="filter-chip active" onclick="filterCategory('all')">All</button>
             <button class="filter-chip" onclick="filterCategory('landscapes')">Landscapes</button>
             <button class="filter-chip" onclick="filterCategory('culture')">Culture & Traditions</button>
             <button class="filter-chip" onclick="filterCategory('fashion')">Fashion & Attire</button>
-            <button class="filter-chip" onclick="filterCategory('architecture')">Architecture</button>
-            <button class="filter-chip" onclick="filterCategory('daily-life')">Daily Life</button>
-            <button class="filter-chip" onclick="filterCategory('music')">Music & Arts</button>
+            <button class="filter-chip" onclick="filterCategory('architecture')">Architecture & Landmarks</button>
+            <button class="filter-chip" onclick="filterCategory('dailylife')">Daily Life & Street</button>
+            <button class="filter-chip" onclick="filterCategory('art')">Art & Craft</button>
             <button class="filter-chip" onclick="filterCategory('culinary')">Food & Culinary</button>
-            <button class="filter-chip" onclick="filterCategory('history')">History & Archaeology</button>
+            <button class="filter-chip" onclick="filterCategory('archives')">Historical Archives</button>
         </div>
     </div>
 
     <!-- MASONRY GALLERY GRID -->
     <div class="gallery-container" id="gallery">
+        <!-- EDITED: Updated data-category attributes to match spec values (e.g., 'dailylife', 'archives') -->
         <div class="gallery-item" data-category="landscapes" data-title="Nile Sunset Khartoum">
             <img src="https://picsum.photos/600/800?random=1" alt="Landscapes">
             <div class="item-info">
@@ -338,7 +370,7 @@
             <img src="https://picsum.photos/600/500?random=2" alt="Culture">
             <div class="item-info">
                 <span>Jirtig Heritage</span>
-                <span class="item-tag">Culture</span>
+                <span class="item-tag">Culture & Traditions</span>
             </div>
         </div>
 
@@ -346,7 +378,7 @@
             <img src="https://picsum.photos/600/900?random=3" alt="Fashion">
             <div class="item-info">
                 <span>Traditional Toub</span>
-                <span class="item-tag">Fashion</span>
+                <span class="item-tag">Fashion & Attire</span>
             </div>
         </div>
 
@@ -354,7 +386,7 @@
             <img src="https://picsum.photos/600/700?random=4" alt="Architecture">
             <div class="item-info">
                 <span>Meroe Pyramids</span>
-                <span class="item-tag">Architecture</span>
+                <span class="item-tag">Architecture & Landmarks</span>
             </div>
         </div>
     </div>
