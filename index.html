@@ -70,7 +70,7 @@
             color: var(--accent-gold); 
         }
 
-        /* EDITED: Header buttons container */
+        /* Header buttons container */
         .header-actions {
             display: flex;
             align-items: center;
@@ -95,7 +95,7 @@
             border-color: var(--accent-gold);
         }
 
-        /* EDITED: Small side button for the Developer Spec / Admin Feature */
+        /* Small side button for the Developer Spec / Admin Feature */
         .admin-btn {
             background-color: transparent;
             color: var(--header-text);
@@ -107,6 +107,7 @@
             border: 1px solid var(--border-dark);
             opacity: 0.7;
             transition: all 0.2s ease;
+            cursor: pointer;
         }
 
         .admin-btn:hover {
@@ -160,6 +161,137 @@
         .hero-cta:hover {
             opacity: 0.9;
             transform: translateY(-1px);
+        }
+
+        /* <!-- EDITED: Added Admin Panel and Modal Styles --> */
+        .admin-dashboard {
+            display: none; /* Revealed upon authentication */
+            max-width: 700px;
+            margin: 0 auto 40px;
+            padding: 24px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-gold);
+            border-radius: 8px;
+        }
+
+        .admin-dashboard h2 {
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+        }
+
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .admin-form input, 
+        .admin-form select {
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .admin-form input:focus, 
+        .admin-form select:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .admin-form button {
+            background-color: var(--accent-gold);
+            color: #0d0e11;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .admin-form button:hover {
+            opacity: 0.9;
+        }
+
+        /* Modal Overlay Styles */
+        .admin-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-modal {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .admin-modal h3 {
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .admin-modal input[type="password"] {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        .admin-modal input[type="password"]:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .admin-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-modal-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: var(--accent-gold);
+            color: #0d0e11;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .admin-modal-close-btn {
+            padding: 10px;
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-dark);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .admin-modal-error {
+            color: #ef4444;
+            font-size: 0.82rem;
+            margin-top: 8px;
+            display: none;
         }
 
         /* CONTROLS & FILTERS */
@@ -321,10 +453,10 @@
             <!-- EDITED: Changed title from 'Sudanese Youth | Visuals Project' to 'Sudanese Youth | Visual Project' -->
             <div class="logo-text">Sudanese Youth <span>| Visual Project</span></div>
         </div>
-        <!-- EDITED: Wrapped action buttons and added small side admin button -->
+        <!-- EDITED: Updated Admin button to trigger in-page modal via JS -->
         <div class="header-actions">
             <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="upload-btn">+ Submit Media</a>
-            <a href="/admin" class="admin-btn">Admin</a>
+            <button class="admin-btn" onclick="openAdminModal()">Admin</button>
         </div>
     </header>
 
@@ -337,6 +469,40 @@
         <!-- EDITED: Removed emoji and updated call-to-action button text -->
         <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="hero-cta">Add Sudan visuals from your lens</a>
     </section>
+
+    <!-- <!-- EDITED: Integrated Hidden Admin Upload Form Dashboard Section --> -->
+    <div class="admin-dashboard" id="adminDashboard">
+        <h2>Admin Upload Dashboard</h2>
+        <form class="admin-form" id="adminUploadForm" onsubmit="handleImageUpload(event)">
+            <input type="file" id="photoFileInput" accept=".jpg, .jpeg, .png, .webp" required>
+            <input type="text" id="photoTitleInput" placeholder="Caption / Title (e.g., Jirtig Ceremony • Khartoum)" required>
+            <select id="photoCategorySelect" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="landscapes">Landscapes</option>
+                <option value="culture">Culture & Traditions</option>
+                <option value="fashion">Fashion & Attire</option>
+                <option value="architecture">Architecture & Landmarks</option>
+                <option value="dailylife">Daily Life & Street</option>
+                <option value="art">Art & Craft</option>
+                <option value="culinary">Food & Culinary</option>
+                <option value="archives">Historical Archives</option>
+            </select>
+            <button type="submit">Publish Photo to Gallery</button>
+        </form>
+    </div>
+
+    <!-- <!-- EDITED: Admin Access Passcode Modal --> -->
+    <div class="admin-modal-overlay" id="adminModalOverlay">
+        <div class="admin-modal">
+            <h3>Admin Access</h3>
+            <input type="password" id="adminPassInput" placeholder="Enter Admin Passcode" onkeydown="if(event.key==='Enter') unlockAdmin()">
+            <div class="admin-modal-actions">
+                <button class="admin-modal-btn" onclick="unlockAdmin()">Unlock Dashboard</button>
+                <button class="admin-modal-close-btn" onclick="closeAdminModal()">Cancel</button>
+            </div>
+            <div class="admin-modal-error" id="adminModalError">Incorrect passcode, try again.</div>
+        </div>
+    </div>
 
     <!-- SEARCH & CATEGORY FILTERS -->
     <div class="controls">
@@ -399,6 +565,82 @@
 
     <!-- JAVASCRIPT -->
     <script>
+        // <!-- EDITED: Admin Passcode & Modal Handlers -->
+        const ADMIN_PASS = "Sudan2026!";
+
+        function openAdminModal() {
+            document.getElementById('adminModalOverlay').style.display = 'flex';
+            document.getElementById('adminPassInput').value = '';
+            document.getElementById('adminModalError').style.display = 'none';
+            document.getElementById('adminPassInput').focus();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModalOverlay').style.display = 'none';
+        }
+
+        function unlockAdmin() {
+            const enteredPass = document.getElementById('adminPassInput').value;
+            const errorElement = document.getElementById('adminModalError');
+
+            if (enteredPass === ADMIN_PASS) {
+                closeAdminModal();
+                const dash = document.getElementById('adminDashboard');
+                dash.style.display = 'block';
+                dash.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // <!-- EDITED: Dynamic Media Upload & Gallery Injection Handler -->
+        function handleImageUpload(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('photoFileInput');
+            const titleInput = document.getElementById('photoTitleInput').value.trim();
+            const categorySelect = document.getElementById('photoCategorySelect');
+            const categoryVal = categorySelect.value;
+            const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const imageUrl = evt.target.result;
+                    
+                    // Create new gallery item
+                    const newGalleryItem = document.createElement('div');
+                    newGalleryItem.className = 'gallery-item';
+                    newGalleryItem.setAttribute('data-category', categoryVal);
+                    newGalleryItem.setAttribute('data-title', titleInput);
+
+                    newGalleryItem.innerHTML = `
+                        <img src="${imageUrl}" alt="${titleInput}">
+                        <div class="item-info">
+                            <span>${titleInput}</span>
+                            <span class="item-tag">${categoryText}</span>
+                        </div>
+                    `;
+
+                    // Attach lightbox event listener to the newly uploaded image
+                    newGalleryItem.querySelector('img').addEventListener('click', (imgEvt) => {
+                        imgEvt.stopPropagation();
+                        lightboxImg.src = imageUrl;
+                        lightbox.style.display = 'flex';
+                    });
+
+                    // Prepend to top of gallery
+                    const gallery = document.getElementById('gallery');
+                    gallery.insertBefore(newGalleryItem, gallery.firstChild);
+
+                    // Reset form
+                    document.getElementById('adminUploadForm').reset();
+                    alert('Photo published successfully to the live gallery!');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+
         // Category Filter Logic
         function filterCategory(category) {
             const chips = document.querySelectorAll('.filter-chip');
