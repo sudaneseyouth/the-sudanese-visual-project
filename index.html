@@ -549,7 +549,7 @@
             const enteredPass = document.getElementById('adminPassInput').value;
             const token = document.getElementById('githubTokenInput').value.trim();
 
-            if (enteredPass === ADMIN_PASS && token.startsWith("ghp_")) {
+            if (enteredPass === ADMIN_PASS && (token.startsWith("ghp_") || token.startsWith("github_pat_"))) {
                 window.userGithubToken = token;
                 closeAdminModal();
                 const dash = document.getElementById('adminDashboard');
@@ -560,7 +560,7 @@
             } else {
                 const err = document.getElementById('adminModalError');
                 if (err) {
-                    err.innerText = "Invalid passcode or token format (must start with ghp_)";
+                    err.innerText = "Invalid passcode or token format";
                     err.style.display = 'block';
                 }
             }
@@ -579,6 +579,8 @@
             const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
 
             try {
+                if (!fileInput) throw new Error("Please select an image file.");
+
                 // 1. Convert image to base64
                 const base64Data = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -602,19 +604,19 @@
                     })
                 });
 
-                if (!uploadRes.ok) throw new Error("Image upload failed. Check your token permissions.");
+                const uploadJson = await uploadRes.json();
+                if (!uploadRes.ok) throw new Error(uploadJson.message || "Image upload failed. Check your GitHub Token permissions.");
 
                 // 3. Fetch current index.html
                 const htmlRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
                     headers: { 'Authorization': `Bearer ${window.userGithubToken}` }
                 });
                 
-                if (!htmlRes.ok) throw new Error("Failed to read index.html from repository.");
-                
-                const htmlData = await htmlRes.json();
+                const htmlJson = await htmlRes.json();
+                if (!htmlRes.ok) throw new Error(htmlJson.message || "Failed to read index.html from repository.");
                 
                 // Safe UTF-8 Base64 Decoding
-                const currentHtml = decodeURIComponent(atob(htmlData.content.replace(/\s/g, '')).split('').map(c => 
+                const currentHtml = decodeURIComponent(atob(htmlJson.content.replace(/\s/g, '')).split('').map(c => 
                     '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
                 ).join(''));
 
@@ -648,11 +650,12 @@
                     body: JSON.stringify({
                         message: `Publish photo card to gallery: ${titleInput}`,
                         content: encodedUpdatedHtml,
-                        sha: htmlData.sha
+                        sha: htmlJson.sha
                     })
                 });
 
-                if (!updateRes.ok) throw new Error("Failed to update index.html on GitHub.");
+                const updateJson = await updateRes.json();
+                if (!updateRes.ok) throw new Error(updateJson.message || "Failed to update index.html on GitHub.");
 
                 alert("Success! Photo published. GitHub Pages will build in 1–2 minutes.");
                 location.reload();
