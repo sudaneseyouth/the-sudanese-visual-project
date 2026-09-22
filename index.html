@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Sudan Visuals Project | Sudanese Youth</title>
     <style>
-        /* COLOR PALETTE & STYLING */
         :root {
             --bg-dark: #0d0e11;
             --card-bg: #161920;
@@ -31,7 +30,6 @@
             padding-bottom: 60px;
         }
 
-        /* LIGHT HEADER BANNER */
         header {
             display: flex;
             justify-content: space-between;
@@ -48,13 +46,14 @@
         .brand-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .brand-logo {
-            height: 42px;
+            height: 38px;
             width: auto;
             object-fit: contain;
+            border-radius: 4px;
         }
 
         .logo-text {
@@ -112,7 +111,6 @@
             color: var(--text-light);
         }
 
-        /* HERO SECTION */
         .hero {
             text-align: center;
             padding: 50px 20px 35px;
@@ -139,7 +137,31 @@
         .hero p {
             color: var(--text-muted);
             font-size: 1.05rem;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+        }
+
+        .pinterest-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background-color: #e60023;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            box-shadow: 0 4px 12px rgba(230, 0, 35, 0.3);
+        }
+
+        .pinterest-link:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+        }
+
+        .pinterest-icon {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
         }
 
         .hero-cta {
@@ -159,7 +181,6 @@
             transform: translateY(-1px);
         }
 
-        /* Admin Panel and Modal Styles */
         .admin-dashboard {
             display: none;
             max-width: 700px;
@@ -213,7 +234,6 @@
             opacity: 0.9;
         }
 
-        /* Modal Overlay Styles */
         .admin-modal-overlay {
             display: none;
             position: fixed;
@@ -291,7 +311,6 @@
             display: none;
         }
 
-        /* CONTROLS & FILTERS */
         .controls {
             display: flex;
             flex-direction: column;
@@ -343,7 +362,6 @@
             font-weight: 600;
         }
 
-        /* GALLERY GRID */
         .gallery-container {
             max-width: 1300px;
             margin: 0 auto;
@@ -390,7 +408,6 @@
             color: var(--accent-gold);
         }
 
-        /* LIGHTBOX MODAL */
         .lightbox {
             display: none;
             position: fixed;
@@ -420,7 +437,6 @@
             cursor: pointer;
         }
 
-        /* RESPONSIVE LAYOUT */
         @media (max-width: 900px) {
             .gallery-container {
                 column-count: 2;
@@ -442,7 +458,6 @@
 </head>
 <body>
 
-    <!-- LIGHT HEADER WITH BLACK LOGO PLACEHOLDER -->
     <header>
         <div class="brand-container">
             <img src="sudanese-youth-logo.png" alt="Sudanese Youth Logo" class="brand-logo" onerror="this.style.display='none'">
@@ -454,15 +469,22 @@
         </div>
     </header>
 
-    <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-tag">Black Pillar • Identity & Heritage</div>
         <h1>Preserving Sudanese Culture & Memory</h1>
         <p>A community-driven digital archive documenting the landscape, people, daily life, and visual history of Sudan.</p>
+        
+        <div>
+            <a href="https://pin.it/1hx4VMbUe" target="_blank" class="pinterest-link" title="Visit Pinterest Profile">
+                <svg class="pinterest-icon" viewBox="0 0 24 24">
+                    <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+                </svg>
+            </a>
+        </div>
+
         <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="hero-cta">Add Sudan visuals from your lens</a>
     </section>
 
-    <!-- Hidden Admin Upload Form Dashboard Section -->
     <div class="admin-dashboard" id="adminDashboard">
         <h2>Admin Upload Dashboard</h2>
         <form class="admin-form" id="adminUploadForm" onsubmit="handleImageUpload(event)">
@@ -483,21 +505,19 @@
         </form>
     </div>
 
-    <!-- Admin Access Passcode Modal -->
     <div class="admin-modal-overlay" id="adminModalOverlay">
         <div class="admin-modal">
             <h3>Admin Access</h3>
             <input type="password" id="adminPassInput" placeholder="Enter Admin Passcode">
-            <input type="password" id="githubTokenInput" placeholder="Enter GitHub Personal Access Token (ghp_...)">
+            <input type="password" id="githubTokenInput" placeholder="Enter GitHub Token (github_pat_...)">
             <div class="admin-modal-actions">
                 <button class="admin-modal-btn" onclick="unlockAdmin()">Unlock Dashboard</button>
                 <button class="admin-modal-close-btn" onclick="closeAdminModal()">Cancel</button>
             </div>
-            <div class="admin-modal-error" id="adminModalError">Incorrect passcode or token format!</div>
+            <div class="admin-modal-error" id="adminModalError">Incorrect passcode or token!</div>
         </div>
     </div>
 
-    <!-- SEARCH & CATEGORY FILTERS -->
     <div class="controls">
         <input type="text" id="searchInput" class="search-box" placeholder="Search visuals (e.g., Jirtig, Khartoum, Nile, Toub)...">
         <div class="filters">
@@ -513,17 +533,13 @@
         </div>
     </div>
 
-    <!-- MASONRY GALLERY GRID -->
-    <div class="gallery-container" id="gallery">
-    </div>
+    <div class="gallery-container" id="gallery"></div>
 
-    <!-- LIGHTBOX PREVIEW -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <span class="lightbox-close">&times;</span>
         <img id="lightboxImg" src="" alt="Enlarged View">
     </div>
 
-    <!-- JAVASCRIPT -->
     <script>
         const GITHUB_USERNAME = "sudaneseyouth"; 
         const GITHUB_REPO = "the-sudanese-visual-project"; 
@@ -549,7 +565,7 @@
             const enteredPass = document.getElementById('adminPassInput').value;
             const token = document.getElementById('githubTokenInput').value.trim();
 
-            if (enteredPass === ADMIN_PASS && (token.startsWith("ghp_") || token.startsWith("github_pat_"))) {
+            if (enteredPass === ADMIN_PASS && token.length > 10) {
                 window.userGithubToken = token;
                 closeAdminModal();
                 const dash = document.getElementById('adminDashboard');
@@ -560,32 +576,45 @@
             } else {
                 const err = document.getElementById('adminModalError');
                 if (err) {
-                    err.innerText = "Invalid passcode or token format";
+                    err.innerText = "Invalid passcode or token!";
                     err.style.display = 'block';
                 }
             }
         }
 
+        async function loadGallery() {
+            const gallery = document.getElementById('gallery');
+            try {
+                const res = await fetch('gallery.json?v=' + Date.now());
+                if (!res.ok) return;
+                const items = await res.json();
+                gallery.innerHTML = items.map(item => `
+                    <div class="gallery-item" data-category="${item.category}" data-title="${item.title}">
+                        <img src="${item.src}" alt="${item.title}">
+                        <div class="item-info">
+                            <span>${item.title}</span>
+                            <span class="item-tag">${item.categoryText}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error("Gallery loading error:", e);
+            }
+        }
+
         async function handleImageUpload(e) {
             e.preventDefault();
-            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('publishBtn');
             submitBtn.innerText = "Publishing to GitHub...";
             submitBtn.disabled = true;
 
             const fileInput = document.getElementById('photoFileInput').files[0];
             const titleInput = document.getElementById('photoTitleInput').value.trim();
             const categorySelect = document.getElementById('photoCategorySelect');
-            
-            // Safe fallback evaluation
             const categoryVal = categorySelect.value;
-            const selectedOption = categorySelect.options[categorySelect.selectedIndex];
-            const categoryText = selectedOption ? selectedOption.text : "General";
+            const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
 
             try {
-                if (!fileInput) throw new Error("Please select an image file.");
-                if (!categoryVal) throw new Error("Please select a category.");
-
-                // 1. Convert image to base64
                 const base64Data = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onload = () => resolve(reader.result.split(',')[1]);
@@ -595,7 +624,6 @@
 
                 const fileName = `uploads/${Date.now()}_${fileInput.name.replace(/\s+/g, '_')}`;
 
-                // 2. Upload image file to GitHub
                 const uploadRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${fileName}`, {
                     method: 'PUT',
                     headers: {
@@ -608,60 +636,49 @@
                     })
                 });
 
-                const uploadJson = await uploadRes.json();
-                if (!uploadRes.ok) throw new Error(uploadJson.message || "Image upload failed. Check your GitHub Token permissions.");
+                if (!uploadRes.ok) {
+                    const errJson = await uploadRes.json();
+                    throw new Error(errJson.message || "Image upload failed.");
+                }
 
-                // 3. Fetch current index.html
-                const htmlRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
+                let currentJson = [];
+                let sha = null;
+                const jsonRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/gallery.json`, {
                     headers: { 'Authorization': `Bearer ${window.userGithubToken}` }
                 });
-                
-                const htmlJson = await htmlRes.json();
-                if (!htmlRes.ok) throw new Error(htmlJson.message || "Failed to read index.html from repository.");
-                
-                // Safe UTF-8 Base64 Decoding
-                const currentHtml = decodeURIComponent(atob(htmlJson.content.replace(/\s/g, '')).split('').map(c => 
-                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-                ).join(''));
 
-                // 4. Create new photo card HTML
-                const newPhotoCard = `
-        <div class="gallery-item" data-category="${categoryVal}" data-title="${titleInput}">
-            <img src="${fileName}" alt="${titleInput}">
-            <div class="item-info">
-                <span>${titleInput}</span>
-                <span class="item-tag">${categoryText}</span>
-            </div>
-        </div>`;
+                if (jsonRes.ok) {
+                    const jsonFileData = await jsonRes.json();
+                    sha = jsonFileData.sha;
+                    const jsonContent = atob(jsonFileData.content.replace(/\s/g, ''));
+                    currentJson = JSON.parse(jsonContent);
+                }
 
-                const updatedHtml = currentHtml.replace(
-                    '<div class="gallery-container" id="gallery">',
-                    '<div class="gallery-container" id="gallery">' + newPhotoCard
-                );
+                currentJson.unshift({
+                    src: fileName,
+                    title: titleInput,
+                    category: categoryVal,
+                    categoryText: categoryText
+                });
 
-                // Safe UTF-8 Base64 Encoding
-                const encodedUpdatedHtml = btoa(encodeURIComponent(updatedHtml).replace(/%([0-9A-F]{2})/g, (match, p1) => 
-                    String.fromCharCode('0x' + p1)
-                ));
+                const updatedJsonBase64 = btoa(JSON.stringify(currentJson, null, 2));
 
-                // 5. Update index.html on GitHub
-                const updateRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
+                const updateJsonRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/gallery.json`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${window.userGithubToken}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: `Publish photo card to gallery: ${titleInput}`,
-                        content: encodedUpdatedHtml,
-                        sha: htmlJson.sha
+                        message: `Add ${titleInput} to gallery.json`,
+                        content: updatedJsonBase64,
+                        sha: sha
                     })
                 });
 
-                const updateJson = await updateRes.json();
-                if (!updateRes.ok) throw new Error(updateJson.message || "Failed to update index.html on GitHub.");
+                if (!updateJsonRes.ok) throw new Error("Failed to update gallery data.");
 
-                alert("Success! Photo published. GitHub Pages will build in 1–2 minutes.");
+                alert("Success! Photo published.");
                 location.reload();
 
             } catch (err) {
@@ -707,27 +724,12 @@
             });
         }
 
-        // Open Lightbox when clicking gallery images
-        const gallery = document.getElementById('gallery');
-        if (gallery) {
-            gallery.addEventListener('click', function(e) {
-                const item = e.target.closest('.gallery-item');
-                if (item) {
-                    const img = item.querySelector('img');
-                    if (img) {
-                        const lightbox = document.getElementById('lightbox');
-                        const lightboxImg = document.getElementById('lightboxImg');
-                        lightboxImg.src = img.src;
-                        lightbox.style.display = 'flex';
-                    }
-                }
-            });
-        }
-
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
             if (lightbox) lightbox.style.display = 'none';
         }
+
+        window.onload = loadGallery;
     </script>
 </body>
 </html>
