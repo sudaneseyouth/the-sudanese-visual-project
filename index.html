@@ -575,11 +575,15 @@
             const fileInput = document.getElementById('photoFileInput').files[0];
             const titleInput = document.getElementById('photoTitleInput').value.trim();
             const categorySelect = document.getElementById('photoCategorySelect');
+            
+            // Safe fallback evaluation
             const categoryVal = categorySelect.value;
-            const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
+            const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+            const categoryText = selectedOption ? selectedOption.text : "General";
 
             try {
                 if (!fileInput) throw new Error("Please select an image file.");
+                if (!categoryVal) throw new Error("Please select a category.");
 
                 // 1. Convert image to base64
                 const base64Data = await new Promise((resolve, reject) => {
