@@ -488,12 +488,12 @@
         <div class="admin-modal">
             <h3>Admin Access</h3>
             <input type="password" id="adminPassInput" placeholder="Enter Admin Passcode">
-            <input type="text" id="githubTokenInput" placeholder="Enter GitHub Personal Access Token (ghp_...)">
+            <input type="password" id="githubTokenInput" placeholder="Enter GitHub Personal Access Token (ghp_...)">
             <div class="admin-modal-actions">
                 <button class="admin-modal-btn" onclick="unlockAdmin()">Unlock Dashboard</button>
                 <button class="admin-modal-close-btn" onclick="closeAdminModal()">Cancel</button>
             </div>
-            <div class="admin-modal-error" id="adminModalError">Incorrect passcode or token missing!</div>
+            <div class="admin-modal-error" id="adminModalError">Incorrect passcode or token format!</div>
         </div>
     </div>
 
@@ -514,9 +514,9 @@
     </div>
 
     <!-- MASONRY GALLERY GRID -->
-    <!-- MASONRY GALLERY GRID -->
     <div class="gallery-container" id="gallery">
     </div>
+
     <!-- LIGHTBOX PREVIEW -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <span class="lightbox-close">&times;</span>
@@ -525,164 +525,6 @@
 
     <!-- JAVASCRIPT -->
     <script>
-        // EDITED: Integrated accurate GitHub details retrieved from photo reference
-        const GITHUB_USERNAME = "sudaneseyouth"; 
-        const GITHUB_REPO = "the-sudanese-visual-project"; 
-        
-        const ADMIN_PASS = "Sudan2026!";
-        let userGithubToken = "";
-
-        function openAdminModal() {
-            document.getElementById('adminModalOverlay').style.display = 'flex';
-            document.getElementById('adminPassInput').value = '';
-            document.getElementById('githubTokenInput').value = '';
-            document.getElementById('adminModalError').style.display = 'none';
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModalOverlay').style.display = 'none';
-        }
-
-        function unlockAdmin() {
-            const enteredPass = document.getElementById('adminPassInput').value;
-            const enteredToken = document.getElementById('githubTokenInput').value.trim();
-            const errorElement = document.getElementById('adminModalError');
-
-            if (enteredPass === ADMIN_PASS && enteredToken.length > 0) {
-                userGithubToken = enteredToken;
-                closeAdminModal();
-                const dash = document.getElementById('adminDashboard');
-                dash.style.display = 'block';
-                dash.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                errorElement.style.display = 'block';
-            }
-        }
-
-        // Handles direct image uploading and committing straight to GitHub repository
-        async function handleImageUpload(e) {
-            e.preventDefault();
-
-            const publishBtn = document.getElementById('publishBtn');
-            publishBtn.innerText = 'Publishing to GitHub...';
-            publishBtn.disabled = true;
-
-            const fileInput = document.getElementById('photoFileInput');
-            const titleInput = document.getElementById('photoTitleInput').value.trim();
-            const categorySelect = document.getElementById('photoCategorySelect');
-            const categoryVal = categorySelect.value;
-            const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
-
-            if (!fileInput.files || !fileInput.files[0]) return;
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = async function(evt) {
-                const base64Data = evt.target.result.split(',')[1];
-                const fileName = `images/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
-
-                try {
-                    // Step A: Upload image file to GitHub repository
-                    const imageUploadRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${fileName}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${userGithubToken}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Upload photo: ${titleInput}`,
-                            content: base64Data
-                        })
-                    });
-
-                    if (!imageUploadRes.ok) throw new Error('Image upload failed. Check token permissions.');
-
-                    const imageUploadJson = await imageUploadRes.json();
-                    const rawImageUrl = imageUploadJson.content.download_url;
-
-                    // Step B: Get index.html from GitHub to update repository code
-                    const getHtmlRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
-                        headers: { 'Authorization': `token ${userGithubToken}` }
-                    });
-                    
-                    const getHtmlJson = await getHtmlRes.json();
-                    const htmlSha = getHtmlJson.sha;
-                    const decodedHtml = decodeURIComponent(escape(atob(getHtmlJson.content)));
-
-                    // Step C: Inject new photo card into gallery grid inside index.html
-                    const newPhotoHtml = `
-        <div class="gallery-item" data-category="${categoryVal}" data-title="${titleInput}">
-            <img src="${rawImageUrl}" alt="${titleInput}">
-            <div class="item-info">
-                <span>${titleInput}</span>
-                <span class="item-tag">${categoryText}</span>
-            </div>
-        </div>`;
-
-                    const updatedHtml = decodedHtml.replace('<div class="gallery-container" id="gallery">', '<div class="gallery-container" id="gallery">' + newPhotoHtml);
-                    const encodedUpdatedHtml = btoa(unescape(encodeURIComponent(updatedHtml)));
-
-                    // Step D: Commit updated index.html back to GitHub
-                    const updateHtmlRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${userGithubToken}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Add new image card: ${titleInput}`,
-                            content: encodedUpdatedHtml,
-                            sha: htmlSha
-                        })
-                    });
-
-                    if (!updateHtmlRes.ok) throw new Error('Failed to update index.html on GitHub.');
-
-                    alert('Photo published successfully and committed to GitHub!');
-                    location.reload();
-
-                } catch (err) {
-                    alert('Error: ' + err.message);
-                    publishBtn.innerText = 'Publish Photo to GitHub';
-                    publishBtn.disabled = false;
-                }
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        // Category Filter Logic
-        function filterCategory(category) {
-            const chips = document.querySelectorAll('.filter-chip');
-            chips.forEach(chip => chip.classList.remove('active'));
-            event.target.classList.add('active');
-
-            const items = document.querySelectorAll('.gallery-item');
-            items.forEach(item => {
-                if (category === 'all' || item.getAttribute('data-category') === category) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        // Live Search Logic
-        document.getElementById('searchInput').addEventListener('keyup', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const items = document.querySelectorAll('.gallery-item');
-
-            items.forEach(item => {
-                const title = item.getAttribute('data-title').toLowerCase();
-                if (title.includes(searchTerm)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-// REPOSITORY DETAILS & PASSCODE
         const GITHUB_USERNAME = "sudaneseyouth"; 
         const GITHUB_REPO = "the-sudanese-visual-project"; 
         const ADMIN_PASS = "Sudan2026!"; 
@@ -794,16 +636,15 @@
                 alert("Upload Error: " + err.message);
                 console.error(err);
             } finally {
-                submitBtn.innerText = "Publish Photo to Gallery";
+                submitBtn.innerText = "Publish Photo to GitHub";
                 submitBtn.disabled = false;
             }
         }
 
-        // Category Filter
         function filterCategory(category) {
             const chips = document.querySelectorAll('.filter-chip');
             chips.forEach(chip => chip.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event) event.target.classList.add('active');
 
             const items = document.querySelectorAll('.gallery-item');
             items.forEach(item => {
@@ -815,7 +656,6 @@
             });
         }
 
-        // Live Search
         document.getElementById('searchInput').addEventListener('keyup', function(e) {
             const searchTerm = e.target.value.toLowerCase();
             const items = document.querySelectorAll('.gallery-item');
@@ -830,7 +670,6 @@
             });
         });
 
-        // Lightbox
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
 
@@ -846,6 +685,5 @@
             lightbox.style.display = 'none';
         }
     </script>
-       
 </body>
 </html>
