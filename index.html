@@ -524,21 +524,26 @@
     </div>
 
     <!-- JAVASCRIPT -->
+   <!-- JAVASCRIPT -->
     <script>
         const GITHUB_USERNAME = "sudaneseyouth"; 
         const GITHUB_REPO = "the-sudanese-visual-project"; 
         const ADMIN_PASS = "Sudan2026!"; 
 
         function openAdminModal() {
-            document.getElementById('adminModalOverlay').style.display = 'flex';
-            document.getElementById('adminPassInput').value = '';
-            document.getElementById('githubTokenInput').value = '';
-            document.getElementById('adminModalError').style.display = 'none';
-            document.getElementById('adminPassInput').focus();
+            const overlay = document.getElementById('adminModalOverlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                document.getElementById('adminPassInput').value = '';
+                document.getElementById('githubTokenInput').value = '';
+                document.getElementById('adminModalError').style.display = 'none';
+                document.getElementById('adminPassInput').focus();
+            }
         }
 
         function closeAdminModal() {
-            document.getElementById('adminModalOverlay').style.display = 'none';
+            const overlay = document.getElementById('adminModalOverlay');
+            if (overlay) overlay.style.display = 'none';
         }
 
         function unlockAdmin() {
@@ -549,12 +554,16 @@
                 window.userGithubToken = token;
                 closeAdminModal();
                 const dash = document.getElementById('adminDashboard');
-                dash.style.display = 'block';
-                dash.scrollIntoView({ behavior: 'smooth' });
+                if (dash) {
+                    dash.style.display = 'block';
+                    dash.scrollIntoView({ behavior: 'smooth' });
+                }
             } else {
                 const err = document.getElementById('adminModalError');
-                err.innerText = "Invalid passcode or token format (must start with ghp_)";
-                err.style.display = 'block';
+                if (err) {
+                    err.innerText = "Invalid passcode or token format (must start with ghp_)";
+                    err.style.display = 'block';
+                }
             }
         }
 
@@ -644,7 +653,9 @@
         function filterCategory(category) {
             const chips = document.querySelectorAll('.filter-chip');
             chips.forEach(chip => chip.classList.remove('active'));
-            if (event) event.target.classList.add('active');
+            if (window.event && window.event.target) {
+                window.event.target.classList.add('active');
+            }
 
             const items = document.querySelectorAll('.gallery-item');
             items.forEach(item => {
@@ -656,33 +667,26 @@
             });
         }
 
-        document.getElementById('searchInput').addEventListener('keyup', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const items = document.querySelectorAll('.gallery-item');
+        const searchBox = document.getElementById('searchInput');
+        if (searchBox) {
+            searchBox.addEventListener('keyup', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const items = document.querySelectorAll('.gallery-item');
 
-            items.forEach(item => {
-                const title = item.getAttribute('data-title').toLowerCase();
-                if (title.includes(searchTerm)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
+                items.forEach(item => {
+                    const title = item.getAttribute('data-title').toLowerCase();
+                    if (title.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
             });
-        });
-
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightboxImg');
-
-        document.querySelectorAll('.gallery-item img').forEach(img => {
-            img.addEventListener('click', (e) => {
-                e.stopPropagation();
-                lightboxImg.src = img.src;
-                lightbox.style.display = 'flex';
-            });
-        });
+        }
 
         function closeLightbox() {
-            lightbox.style.display = 'none';
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox) lightbox.style.display = 'none';
         }
     </script>
 </body>
