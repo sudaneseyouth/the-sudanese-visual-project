@@ -524,7 +524,6 @@
     </div>
 
     <!-- JAVASCRIPT -->
-   <!-- JAVASCRIPT -->
     <script>
         const GITHUB_USERNAME = "sudaneseyouth"; 
         const GITHUB_REPO = "the-sudanese-visual-project"; 
@@ -580,6 +579,7 @@
             const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
 
             try {
+                // 1. Convert image to base64
                 const base64Data = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onload = () => resolve(reader.result.split(',')[1]);
@@ -589,6 +589,7 @@
 
                 const fileName = `uploads/${Date.now()}_${fileInput.name.replace(/\s+/g, '_')}`;
 
+                // 2. Upload image file to GitHub
                 const uploadRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${fileName}`, {
                     method: 'PUT',
                     headers: {
@@ -601,14 +602,23 @@
                     })
                 });
 
-                if (!uploadRes.ok) throw new Error("Image upload failed. Check your token scopes.");
+                if (!uploadRes.ok) throw new Error("Image upload failed. Check your token permissions.");
 
+                // 3. Fetch current index.html
                 const htmlRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
                     headers: { 'Authorization': `Bearer ${window.userGithubToken}` }
                 });
+                
+                if (!htmlRes.ok) throw new Error("Failed to read index.html from repository.");
+                
                 const htmlData = await htmlRes.json();
-                const currentHtml = decodeURIComponent(escape(atob(htmlData.content)));
+                
+                // Safe UTF-8 Base64 Decoding
+                const currentHtml = decodeURIComponent(atob(htmlData.content.replace(/\s/g, '')).split('').map(c => 
+                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                ).join(''));
 
+                // 4. Create new photo card HTML
                 const newPhotoCard = `
         <div class="gallery-item" data-category="${categoryVal}" data-title="${titleInput}">
             <img src="${fileName}" alt="${titleInput}">
@@ -623,6 +633,12 @@
                     '<div class="gallery-container" id="gallery">' + newPhotoCard
                 );
 
+                // Safe UTF-8 Base64 Encoding
+                const encodedUpdatedHtml = btoa(encodeURIComponent(updatedHtml).replace(/%([0-9A-F]{2})/g, (match, p1) => 
+                    String.fromCharCode('0x' + p1)
+                ));
+
+                // 5. Update index.html on GitHub
                 const updateRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/index.html`, {
                     method: 'PUT',
                     headers: {
@@ -631,7 +647,7 @@
                     },
                     body: JSON.stringify({
                         message: `Publish photo card to gallery: ${titleInput}`,
-                        content: btoa(unescape(encodeURIComponent(updatedHtml))),
+                        content: encodedUpdatedHtml,
                         sha: htmlData.sha
                     })
                 });
