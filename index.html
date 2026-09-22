@@ -703,6 +703,23 @@
             });
         }
 
+        // Open Lightbox when clicking gallery images
+        const gallery = document.getElementById('gallery');
+        if (gallery) {
+            gallery.addEventListener('click', function(e) {
+                const item = e.target.closest('.gallery-item');
+                if (item) {
+                    const img = item.querySelector('img');
+                    if (img) {
+                        const lightbox = document.getElementById('lightbox');
+                        const lightboxImg = document.getElementById('lightboxImg');
+                        lightboxImg.src = img.src;
+                        lightbox.style.display = 'flex';
+                    }
+                }
+            });
+        }
+
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
             if (lightbox) lightbox.style.display = 'none';
