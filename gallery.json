@@ -40,12 +40,7 @@
     "title": "Khabeez",
     "category": "culinary",
     "categoryText": "Food & Culinary"
-  },
-  {
-    "src": "uploads/1790242606605_Khabeez.jpg",
-    "title": "Khabeez",
-    "category": "culinary",
-    "categoryText": "Food & Culinary"
+  
   },
   {
     "src": "uploads/1790242563614_Jirtik.jpg",
@@ -66,9 +61,3 @@
     "categoryText": "Fashion & Attire"
   },
   {
-    "src": "uploads/1790242041117_Jirtig.jpg",
-    "title": "Jirtik",
-    "category": "fashion",
-    "categoryText": "Fashion & Attire"
-  }
-]
