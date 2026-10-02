@@ -1,4 +1,546 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sudan Visuals Project | Sudanese Youth</title>
+    <style>
+        :root {
+            --bg-dark: #0d0e11;
+            --card-bg: #161920;
+            --header-bg: #f4f4f6;
+            --header-text: #0d0e11;
+            --accent-gold: #d4af37;
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-dark: #232732;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 6%;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--header-text);
+            letter-spacing: 0.3px;
+        }
+
+        .logo-text span {
+            color: var(--accent-gold); 
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-btn {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: 1px solid var(--bg-dark);
+        }
+
+        .upload-btn:hover {
+            background-color: var(--accent-gold);
+            color: #0d0e11;
+            border-color: var(--accent-gold);
+        }
+
+        .admin-btn {
+            background-color: transparent;
+            color: var(--header-text);
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.75rem;
+            border: 1px solid var(--border-dark);
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .admin-btn:hover {
+            opacity: 1;
+            background-color: var(--card-bg);
+            color: var(--text-light);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 20px 35px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 {
+            font-size: 2.4rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+
+        .pinterest-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background-color: #e60023;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            box-shadow: 0 4px 12px rgba(230, 0, 35, 0.3);
+        }
+
+        .pinterest-link:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+        }
+
+        .pinterest-icon {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            background-color: var(--accent-gold);
+            color: #0d0e11;
+            padding: 10px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .hero-cta:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .admin-dashboard {
+            display: none;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            padding: 24px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-gold);
+            border-radius: 8px;
+        }
+
+        .admin-dashboard h2 {
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+        }
+
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .admin-form input, 
+        .admin-form select {
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .admin-form input:focus, 
+        .admin-form select:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .admin-form button {
+            background-color: var(--accent-gold);
+            color: #0d0e11;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .admin-form button:hover {
+            opacity: 0.9;
+        }
+
+        .admin-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-modal {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .admin-modal h3 {
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .admin-modal input[type="password"],
+        .admin-modal input[type="text"] {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        .admin-modal input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .admin-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-modal-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: var(--accent-gold);
+            color: #0d0e11;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .admin-modal-close-btn {
+            padding: 10px;
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-dark);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .admin-modal-error {
+            color: #ef4444;
+            font-size: 0.82rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .filter-chip {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-dark);
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip.active, .filter-chip:hover {
+            background-color: var(--accent-gold);
+            color: #0d0e11;
+            border-color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .gallery-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+            column-count: 3;
+            column-gap: 20px;
+        }
+
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-dark);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.03);
+        }
+
+        .item-info {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .item-tag {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            color: var(--accent-gold);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.92);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 6px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .gallery-container {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .gallery-container {
+                column-count: 1;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            header {
+                padding: 12px 4%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-container">
+            <img src="sudanese-youth-logo.png" alt="Sudanese Youth Logo" class="brand-logo" onerror="this.style.display='none'">
+            <div class="logo-text">Sudanese Youth <span>| Visual Project</span></div>
+        </div>
+        <div class="header-actions">
+            <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="upload-btn">+ Submit Media</a>
+            <button class="admin-btn" onclick="openAdminModal()">Admin</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-tag">Black Pillar • Identity & Heritage</div>
+        <h1>Preserving Sudanese Culture & Memory</h1>
+        <p>A community-driven digital archive documenting the landscape, people, daily life, and visual history of Sudan.</p>
+        
+        <div>
+            <a href="https://pin.it/1hx4VMbUe" target="_blank" class="pinterest-link" title="Visit Pinterest Profile">
+                <svg class="pinterest-icon" viewBox="0 0 24 24">
+                    <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+                </svg>
+            </a>
+        </div>
+
+        <a href="https://forms.gle/zXrtSjLmVwyNE2TZ8" target="_blank" class="hero-cta">Add Sudan visuals from your lens</a>
+    </section>
+
+    <div class="admin-dashboard" id="adminDashboard">
+        <h2>Admin Upload Dashboard</h2>
+        <form class="admin-form" id="adminUploadForm" onsubmit="handleImageUpload(event)">
+            <input type="file" id="photoFileInput" accept=".jpg, .jpeg, .png, .webp" required>
+            <input type="text" id="photoTitleInput" placeholder="Caption / Title (e.g., Jirtig Ceremony • Khartoum)" required>
+            <select id="photoCategorySelect" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="landscapes">Landscapes</option>
+                <option value="culture">Culture & Traditions</option>
+                <option value="fashion">Fashion & Attire</option>
+                <option value="architecture">Architecture & Landmarks</option>
+                <option value="dailylife">Daily Life & Street</option>
+                <option value="art">Art & Craft</option>
+                <option value="culinary">Food & Culinary</option>
+                <option value="archives">Historical Archives</option>
+            </select>
+            <button type="submit" id="publishBtn">Publish Photo to GitHub</button>
+        </form>
+    </div>
+
+    <div class="admin-modal-overlay" id="adminModalOverlay">
+        <div class="admin-modal">
+            <h3>Admin Access</h3>
+            <input type="password" id="adminPassInput" placeholder="Enter Admin Passcode">
+            <input type="password" id="githubTokenInput" placeholder="Enter GitHub Token (github_pat_...)">
+            <div class="admin-modal-actions">
+                <button class="admin-modal-btn" onclick="unlockAdmin()">Unlock Dashboard</button>
+                <button class="admin-modal-close-btn" onclick="closeAdminModal()">Cancel</button>
+            </div>
+            <div class="admin-modal-error" id="adminModalError">Incorrect passcode or token!</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="Search visuals (e.g., Jirtig, Khartoum, Nile, Toub)...">
+        <div class="filters">
+            <button class="filter-chip active" onclick="filterCategory('all')">All</button>
+            <button class="filter-chip" onclick="filterCategory('landscapes')">Landscapes</button>
+            <button class="filter-chip" onclick="filterCategory('culture')">Culture & Traditions</button>
+            <button class="filter-chip" onclick="filterCategory('fashion')">Fashion & Attire</button>
+            <button class="filter-chip" onclick="filterCategory('architecture')">Architecture & Landmarks</button>
+            <button class="filter-chip" onclick="filterCategory('dailylife')">Daily Life & Street</button>
+            <button class="filter-chip" onclick="filterCategory('art')">Art & Craft</button>
+            <button class="filter-chip" onclick="filterCategory('culinary')">Food & Culinary</button>
+            <button class="filter-chip" onclick="filterCategory('archives')">Historical Archives</button>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery"></div>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightboxImg" src="" alt="Enlarged View">
+    </div>
+
+    <script>
         const GITHUB_USERNAME = "sudaneseyouth"; 
         const GITHUB_REPO = "the-sudanese-visual-project"; 
         const ADMIN_PASS = "Sudan2026!"; 
@@ -40,7 +582,6 @@
             }
         }
 
-        // Safe Unicode Base64 Helper Functions
         function utf8_to_b64(str) {
             return window.btoa(unescape(encodeURIComponent(str)));
         }
@@ -67,7 +608,6 @@
                                 </div>
                             </div>
                         `).join('');
-                        return;
                     }
                 }
             } catch (e) {
@@ -105,7 +645,6 @@
                 const ext = fileInput.name.split('.').pop().toLowerCase();
                 const fileName = `uploads/img_${Date.now()}.${ext}`;
 
-                // 1. Upload Image File to GitHub
                 const uploadRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${fileName}`, {
                     method: 'PUT',
                     headers: {
@@ -123,7 +662,6 @@
                     throw new Error(errJson.message || "Image upload failed.");
                 }
 
-                // 2. Fetch or Create gallery.json
                 let currentJson = [];
                 let sha = null;
                 const jsonRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/gallery.json`, {
@@ -225,3 +763,5 @@
 
         document.addEventListener('DOMContentLoaded', loadGallery);
     </script>
+</body>
+</html>
